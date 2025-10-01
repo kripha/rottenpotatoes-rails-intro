@@ -11,15 +11,25 @@ class MoviesController < ApplicationController
     @all_ratings = Movie.all_ratings
 
     if params[:ratings].nil?
-      @ratings_to_show = Movie.all_ratings
+      if session[:ratings].nil?
+        @ratings_to_show = Movie.all_ratings
+      else
+        @ratings_to_show = session[:ratings]
+      end
     else
       @ratings_to_show = params[:ratings].keys
+      session[:ratings] = @ratings_to_show
     end
 
     if params[:sort_by].nil?
-      @sort_by = 'title'
+      if session[:sort_by].nil?
+        @sort_by = 'title'
+      else
+        @sort_by = session[:sort_by]
+      end
     else
       @sort_by = params[:sort_by]
+      session[:sort_by] = @sort_by
     end
     @movies = Movie.filter_and_sort(@ratings_to_show, @sort_by)
   end
