@@ -17,4 +17,13 @@ class Movie < ActiveRecord::Base
   def self.all_ratings
     return Movie.pluck(:rating).uniq
   end
+
+  def self.filter_and_sort(ratings_list, column_name)
+    if column_name == "release_date"
+      movies = with_ratings(ratings_list).order(column_name + " DESC")
+    else
+      movies = with_ratings(ratings_list).order(column_name)
+    end
+    return movies
+  end
 end
